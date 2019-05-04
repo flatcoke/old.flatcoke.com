@@ -1,5 +1,3 @@
-import * as Sequelize from 'sequelize'
-
 module.exports = {
   development: {
     username: 'cola',
@@ -8,7 +6,6 @@ module.exports = {
     host: '127.0.0.1',
     port: 3306,
     dialect: 'mysql',
-    operatorsAliases: Sequelize.Op,
   },
   production: {
     username: process.env.DB_USERNAME,
@@ -17,7 +14,6 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'mysql',
-    operatorsAliases: Sequelize.Op,
   },
   test: {
     dialect: 'sqlite',
@@ -25,6 +21,5 @@ module.exports = {
   },
   session: {
     secret: process.env.PRODUCTION_SECRET || 'placeholdersecret',
-    operatorsAliases: Sequelize.Op,
   },
 }

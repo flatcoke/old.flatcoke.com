@@ -22,6 +22,7 @@ export class User extends Model<User> {
   @IsEmail
   @NotEmpty
   @Column({
+    type: DataType.STRING,
     allowNull: false,
     unique: true,
   })
@@ -29,6 +30,7 @@ export class User extends Model<User> {
 
   @NotEmpty
   @Column({
+    type: DataType.STRING(30),
     allowNull: false,
     unique: true,
   })
@@ -46,6 +48,7 @@ export class User extends Model<User> {
   uid!: string
 
   @Column({
+    type: DataType.STRING(30),
     allowNull: false,
   })
   provider!: string
