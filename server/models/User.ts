@@ -5,8 +5,12 @@ import {
   Model,
   NotEmpty,
   Table,
+  DefaultScope,
 } from 'sequelize-typescript'
 
+@DefaultScope({
+  attributes: ['id', 'username', 'email', 'createdAt', 'updatedAt']
+})
 @Table({
   tableName: 'users',
   paranoid: true,

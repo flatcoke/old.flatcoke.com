@@ -2,6 +2,7 @@ import * as express from 'express'
 import { Request, Response } from 'express'
 import * as next from 'next'
 import { sequelize } from './sequelize'
+import router from './routes'
 
 const port = parseInt(process.env.PORT || '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
@@ -10,7 +11,8 @@ const handle = app.getRequestHandler()
 
 app.prepare().then(async () => {
   const server = express()
-  await sequelize.sync({ force: true })
+  await sequelize.sync({ force: false })
+  server.use('/api', router)
   server.get('/test', (req: Request, res: Response) => {
     req
     return res.send('aa')
