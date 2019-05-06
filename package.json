@@ -5,6 +5,7 @@
     "start": "cross-env NODE_ENV=production node .next/server"
   },
   "dependencies": {
+    "@hapi/joi": "^15.0.1",
     "hapi": "^18.1.0",
     "mysql2": "^1.6.5",
     "next": "latest",
@@ -15,9 +16,10 @@
     "sequelize-typescript": "^1.0.0-beta.3"
   },
   "devDependencies": {
+    "@types/hapi": "^18.0.2",
+    "@types/joi": "^14.3.3",
     "@types/next": "^8.0.1",
     "@types/react": "^16.8.8",
-    "@types/hapi": "^18.0.2",
     "@zeit/next-typescript": "^1.1.1",
     "cross-env": "^5.2.0",
     "nodemon": "^1.18.10",

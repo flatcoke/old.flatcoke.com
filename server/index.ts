@@ -1,5 +1,6 @@
 import * as Hapi from 'hapi'
 import * as next from 'next'
+import * as User from './api/users'
 
 import { sequelize } from './sequelize'
 
@@ -18,6 +19,8 @@ const server = new Hapi.Server({
 
 app.prepare().then(async () => {
   await sequelize.sync({ force: false })
+  await User.init(server)
+
 
   server.route({
     method: 'GET',
@@ -51,6 +54,7 @@ app.prepare().then(async () => {
 
   try {
     await server.start()
+
     console.log(`> Ready on http://localhost:${port}`)
   } catch (error) {
     console.log('Error starting server')
