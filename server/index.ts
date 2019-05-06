@@ -1,29 +1,59 @@
-import * as express from 'express'
-import { Request, Response } from 'express'
+import * as Hapi from 'hapi'
 import * as next from 'next'
+
 import { sequelize } from './sequelize'
-import router from './routes'
+
+import {
+  defaultHandlerWrapper,
+  nextHandlerWrapper,
+  pathWrapper,
+} from './next-wrapper'
 
 const port = parseInt(process.env.PORT || '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dir: './client', dev })
-const handle = app.getRequestHandler()
+const server = new Hapi.Server({
+  port,
+})
 
 app.prepare().then(async () => {
-  const server = express()
   await sequelize.sync({ force: false })
-  server.use('/api', router)
-  server.get('/test', (req: Request, res: Response) => {
-    req
-    return res.send('aa')
+
+  server.route({
+    method: 'GET',
+    path: '/a',
+    handler: pathWrapper(app, '/a'),
   })
 
-  server.get('*', (req: Request, res: Response) => {
-    return handle(req, res)
+  server.route({
+    method: 'GET',
+    path: '/b',
+    handler: pathWrapper(app, '/b'),
   })
 
-  server.listen(port, async (err: any) => {
-    if (err) throw err
-    console.log(`> Ready on ${port}`)
+  server.route({
+    method: 'GET',
+    path: '/_next/{p*}' /* next specific routes */,
+    handler: nextHandlerWrapper(app),
   })
+
+  server.route({
+    method: 'GET',
+    path: '/static/{p*}' /* use next to handle static files */,
+    handler: nextHandlerWrapper(app),
+  })
+
+  server.route({
+    method: 'GET',
+    path: '/{p*}' /* catch all route */,
+    handler: defaultHandlerWrapper(app),
+  })
+
+  try {
+    await server.start()
+    console.log(`> Ready on http://localhost:${port}`)
+  } catch (error) {
+    console.log('Error starting server')
+    console.log(error)
+  }
 })
