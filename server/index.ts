@@ -1,14 +1,14 @@
 import * as Hapi from 'hapi'
 import * as next from 'next'
+
 import * as User from './api/users'
-
-import { sequelize } from './sequelize'
-
+import { plugins } from './config/plugins'
 import {
   defaultHandlerWrapper,
   nextHandlerWrapper,
   pathWrapper,
 } from './next-wrapper'
+import { sequelize } from './sequelize'
 
 const port = parseInt(process.env.PORT || '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
@@ -20,7 +20,7 @@ const server = new Hapi.Server({
 app.prepare().then(async () => {
   await sequelize.sync({ force: false })
   await User.init(server)
-
+  await server.register(plugins)
 
   server.route({
     method: 'GET',
