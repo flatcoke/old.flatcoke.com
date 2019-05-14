@@ -1,4 +1,4 @@
-import * as withTypescript from '@zeit/next-typescript'
+const withTypescript = require('@zeit/next-typescript')
 
 module.exports = withTypescript({
   distDir: '../.next',
