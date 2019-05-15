@@ -75,12 +75,42 @@ export default function(server: Hapi.Server) {
       handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
         try {
           const { username, email, password }: any = req.payload
-          const user: User = await User.createByEmail({ username, email, password })
+          const user: User = await User.createByEmail({
+            username,
+            email,
+            password,
+          })
           return user
         } catch (e) {
-          console.log(e)
           return Boom.badRequest()
         }
+      },
+    },
+  })
+
+  server.route({
+    method: 'PUT',
+    path: nested('/users/{id}'),
+    options: {
+      description: 'Update user',
+      tags: ['api', 'user'],
+      validate: {
+        params: {
+          id: Joi.number()
+            .integer()
+            .required(),
+        },
+        payload: {
+          email: Joi.string().email(),
+          username: Joi.string(),
+        },
+      },
+      handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+        const user: User = await User.findByPk(req.params.id)
+        user.update({
+          ...(req.payload as any),
+        })
+        return user
       },
     },
   })
