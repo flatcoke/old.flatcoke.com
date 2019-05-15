@@ -1,5 +1,6 @@
 import * as Hapi from 'hapi'
 import * as Joi from 'joi'
+import * as Boom from 'boom'
 
 import { nested } from '..'
 import { User } from '../../models/User'
@@ -20,6 +21,44 @@ export default function(server: Hapi.Server) {
   })
 
   server.route({
+    method: 'GET',
+    path: nested('/users/{id}'),
+    options: {
+      description: 'Get user',
+      tags: ['api', 'user'],
+      validate: {
+        params: {
+          // prettier-ignore
+          id: Joi.number().integer().required()
+        },
+      },
+      handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+        const user: User = await User.findByPk(req.params.id)
+        return user
+      },
+    },
+  })
+
+  server.route({
+    method: 'DELETE',
+    path: nested('/users/{id}'),
+    options: {
+      description: 'Delete user',
+      tags: ['api', 'user'],
+      validate: {
+        params: {
+          // prettier-ignore
+          id: Joi.number().integer().required()
+        },
+      },
+      handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+        const user: User = await User.findByPk(req.params.id)
+        return user
+      },
+    },
+  })
+
+  server.route({
     method: 'POST',
     path: nested('/users'),
     options: {
@@ -33,20 +72,14 @@ export default function(server: Hapi.Server) {
           password: Joi.string().required(),
         },
       },
-      handler: async (_request: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+      handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
         try {
-          const { username, email, password }: any = _request.payload
-          const user: User = await User.create({
-            username,
-            email,
-            password,
-            provider: 'email',
-            uid: email,
-          })
+          const { username, email, password }: any = req.payload
+          const user: User = await User.createByEmail({ username, email, password })
           return user
         } catch (e) {
           console.log(e)
-          return e
+          return Boom.badRequest()
         }
       },
     },

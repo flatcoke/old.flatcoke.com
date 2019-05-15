@@ -1,19 +1,22 @@
+import { hashSync } from 'bcrypt'
 import {
+  BeforeCreate,
   Column,
   DataType,
+  DefaultScope,
   IsEmail,
   Model,
   NotEmpty,
   Table,
-  DefaultScope,
 } from 'sequelize-typescript'
 
 @DefaultScope({
-  attributes: ['id', 'username', 'email', 'createdAt', 'updatedAt']
+  attributes: ['id', 'username', 'email', 'createdAt', 'updatedAt'],
 })
 @Table({
   tableName: 'users',
   paranoid: true,
+  timestamps: true,
 })
 export class User extends Model<User> {
   @Column({
@@ -28,7 +31,10 @@ export class User extends Model<User> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    unique: true,
+    unique: {
+      name: 'email',
+      msg: 'The email already used.',
+    },
   })
   email!: string
 
@@ -36,7 +42,10 @@ export class User extends Model<User> {
   @Column({
     type: DataType.STRING(30),
     allowNull: false,
-    unique: true,
+    unique: {
+      name: 'username',
+      msg: 'The username already used.',
+    },
   })
   username!: string
 
@@ -74,4 +83,33 @@ export class User extends Model<User> {
     allowNull: false,
   })
   updatedAt!: Date
+
+  @BeforeCreate
+  static setBycriptPassword(instance: User): void {
+    instance.password = hashSync(instance.password, 10)
+  }
+
+  @BeforeCreate
+  static setLowerCase(instance: User): void {
+    instance.username = instance.username.toLowerCase()
+    instance.email = instance.email.toLowerCase()
+  }
+
+  public static createByEmail({
+    username,
+    email,
+    password,
+  }: {
+    username: string
+    email: string
+    password: string
+  }): User {
+    return User.create({
+      username,
+      email,
+      password,
+      provider: 'email',
+      uid: email,
+    })
+  }
 }
