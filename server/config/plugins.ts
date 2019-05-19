@@ -17,6 +17,16 @@ export const plugins: ServerRegisterPluginObject<any>[] = [
         description: 'Description goes here',
         version: '1.0.0',
       },
+      securityDefinitions: {
+        jwt: {
+          type: 'apiKey',
+          name: 'Authorization',
+          in: 'header',
+        },
+      },
     },
+  },
+  {
+    plugin: require('hapi-auth-jwt2'),
   },
 ]

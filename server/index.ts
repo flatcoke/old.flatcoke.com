@@ -9,6 +9,7 @@ import {
   pathWrapper,
 } from './next-wrapper'
 import { sequelize } from './sequelize'
+import { validate } from './auth'
 
 const port = parseInt(process.env.PORT || '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
@@ -22,6 +23,13 @@ app.prepare().then(async () => {
   await sequelize.sync({ force: false })
   await User.init(server)
   await server.register(plugins)
+  server.auth.strategy('jwt', 'jwt', {
+    key: 'NeverShareYourSecret', // TODO: from env
+    validate: validate, // validate function defined above
+    verifyOptions: { algorithms: ['HS256'] }, // pick a strong algorithm
+  })
+
+  server.auth.default('jwt')
 
   server.route({
     method: 'GET',
