@@ -107,9 +107,7 @@ export default function(server: Hapi.Server) {
       },
       handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
         const user: User = await User.findByPk(req.params.id)
-        user.update({
-          ...(req.payload as any),
-        })
+        user.update(req.payload as any)
         return user
       },
     },
