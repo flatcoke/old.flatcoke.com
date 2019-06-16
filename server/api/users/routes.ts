@@ -64,6 +64,7 @@ export default function(server: Hapi.Server) {
     method: 'POST',
     path: nested('/users'),
     options: {
+      auth: false,
       description: 'Create a user',
       tags: ['api', 'user'],
       validate: {

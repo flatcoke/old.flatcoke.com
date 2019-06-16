@@ -1,15 +1,11 @@
-import * as Hapi from 'hapi'
-import * as next from 'next'
+import * as Hapi from 'hapi';
+import * as next from 'next';
 
-import * as User from './api/users'
-import { plugins } from './config/plugins'
-import {
-  defaultHandlerWrapper,
-  nextHandlerWrapper,
-  pathWrapper,
-} from './next-wrapper'
-import { sequelize } from './sequelize'
-import { validate } from './auth'
+import * as User from './api/users';
+import { validate } from './auth';
+import { plugins } from './config/plugins';
+import { defaultHandlerWrapper, nextHandlerWrapper, pathWrapper } from './next-wrapper';
+import { sequelize } from './sequelize';
 
 const port = parseInt(process.env.PORT || '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
@@ -33,12 +29,14 @@ app.prepare().then(async () => {
 
   server.route({
     method: 'GET',
+    options: { auth: false },
     path: '/a',
     handler: pathWrapper(app, '/a'),
   })
 
   server.route({
     method: 'GET',
+    options: { auth: false },
     path: '/b',
     handler: pathWrapper(app, '/b'),
   })
@@ -57,6 +55,7 @@ app.prepare().then(async () => {
 
   server.route({
     method: 'GET',
+    options: { auth: false },
     path: '/{p*}' /* catch all route */,
     handler: defaultHandlerWrapper(app),
   })
