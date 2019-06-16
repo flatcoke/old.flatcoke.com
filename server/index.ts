@@ -20,7 +20,7 @@ app.prepare().then(async () => {
   await User.init(server)
   await server.register(plugins)
   server.auth.strategy('jwt', 'jwt', {
-    key: 'NeverShareYourSecret', // TODO: from env
+    key: process.env.JWT_KEY || 'NeverShareYourSecret',
     validate: validate, // validate function defined above
     verifyOptions: { algorithms: ['HS256'] }, // pick a strong algorithm
   })
