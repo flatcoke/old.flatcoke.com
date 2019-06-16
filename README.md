@@ -16,9 +16,6 @@ $ cp env_example .env
 
 ## Install it and run:
 ```bash
-npm install
-npm run dev
-# or
-yarn
-yarn dev
+$ yarn
+$ yarn dev
 ```
