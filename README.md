@@ -1,9 +1,20 @@
-# nextjs with typeScript + hapi + nodemon example
+# [flatcoke.com](https://flatcoke.com)
 
-froked from [next.js/examples/custom-server-typecript](https://github.com/zeit/next.js/tree/canary/examples/custom-server-typescript) and build hapi
+## Stack
+* Typescript
+* Hapi
+* React
+* Nextjs
+* JWT
+* Swagger
 
-Install it and run:
+## Set up
+```bash
+$ compose-compose up -d
+$ cp env_example .env
+```
 
+## Install it and run:
 ```bash
 npm install
 npm run dev
