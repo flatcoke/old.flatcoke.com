@@ -25,6 +25,7 @@
     "@types/bcrypt": "^3.0.0",
     "@types/boom": "^7.2.1",
     "@types/hapi": "^18.0.2",
+    "@types/hapi-auth-jwt2": "^8.6.1",
     "@types/inert": "^5.1.2",
     "@types/joi": "^14.3.3",
     "@types/next": "^8.0.1",
