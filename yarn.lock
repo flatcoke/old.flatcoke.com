@@ -693,6 +693,12 @@
   version "10.0.6"
   resolved "https://registry.yarnpkg.com/@types/catbox/-/catbox-10.0.6.tgz#8a4c91261cf0afca03351bb82a95b2d6cf43a5d0"
 
+"@types/hapi-auth-jwt2@^8.6.1":
+  version "8.6.1"
+  resolved "https://registry.yarnpkg.com/@types/hapi-auth-jwt2/-/hapi-auth-jwt2-8.6.1.tgz#4ff99ca995c53574ccb9d6a8b8087dce41ba31b0"
+  dependencies:
+    hapi-auth-jwt2 "*"
+
 "@types/hapi@*", "@types/hapi@^18.0.2":
   version "18.0.2"
   resolved "https://registry.yarnpkg.com/@types/hapi/-/hapi-18.0.2.tgz#2c3ed843e1e7358486eccf64256e91f7918948b2"
