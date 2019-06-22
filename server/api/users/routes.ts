@@ -83,7 +83,7 @@ export default function(server: Hapi.Server) {
             email,
             password,
           })
-          return user
+          return { token: user.getToken() }
         } catch (e) {
           return Boom.badRequest()
         }

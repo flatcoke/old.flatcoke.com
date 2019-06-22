@@ -1,4 +1,5 @@
 import { hashSync } from 'bcrypt'
+import { sign } from 'jsonwebtoken'
 import {
   BeforeCreate,
   Column,
@@ -9,6 +10,7 @@ import {
   NotEmpty,
   Table,
 } from 'sequelize-typescript'
+import { JWT_KEY } from '../config/env'
 
 @DefaultScope({
   attributes: ['id', 'username', 'email', 'createdAt', 'updatedAt'],
@@ -93,6 +95,17 @@ export class User extends Model<User> {
   static setLowerCase(instance: User): void {
     instance.username = instance.username.toLowerCase()
     instance.email = instance.email.toLowerCase()
+  }
+
+  getToken(): string {
+    return sign(
+      {
+        id: this.id,
+        email: this.email,
+        username: this.username,
+      },
+      JWT_KEY
+    )
   }
 
   public static createByEmail({
