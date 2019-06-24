@@ -2,6 +2,8 @@ import * as Hapi from 'hapi'
 import * as Joi from 'joi'
 import * as Boom from 'boom'
 
+import { UserPayload } from './user'
+
 import { nested } from '..'
 import { User } from '../../models/User'
 
@@ -77,12 +79,7 @@ export default function(server: Hapi.Server) {
       },
       handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
         try {
-          const { username, email, password }: any = req.payload
-          const user: User = await User.createByEmail({
-            username,
-            email,
-            password,
-          })
+          const user: User = await User.createByEmail(req.payload as UserPayload)
           return { token: user.getToken() }
         } catch (e) {
           return Boom.badRequest()
@@ -110,7 +107,7 @@ export default function(server: Hapi.Server) {
       },
       handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
         const user: User = await User.findByPk(req.params.id)
-        user.update(req.payload as {email: string, username: string})
+        user.update(req.payload as UserPayload)
         return user
       },
     },
