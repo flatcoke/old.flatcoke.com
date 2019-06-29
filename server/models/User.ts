@@ -10,6 +10,7 @@ import {
   NotEmpty,
   Table,
 } from 'sequelize-typescript'
+import { UserPayload } from '../api/users/user'
 import { JWT_KEY } from '../config/env'
 
 @DefaultScope({
@@ -108,21 +109,11 @@ export class User extends Model<User> {
     )
   }
 
-  public static createByEmail({
-    username,
-    email,
-    password,
-  }: {
-    username: string
-    email: string
-    password: string
-  }): User {
+  public static createByEmail(userPayload: UserPayload): User {
     return User.create({
-      username,
-      email,
-      password,
+      ...userPayload,
       provider: 'email',
-      uid: email,
+      uid: userPayload.email,
     })
   }
 }
