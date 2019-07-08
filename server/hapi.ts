@@ -7,6 +7,8 @@ import { sequelize } from './sequelize'
 
 export const port = parseInt(process.env.PORT || '3000', 10)
 
+const NODE_ENV = process.env.NODE_ENV || 'dev'
+
 export const initializeServer = async () => {
   const server = new Hapi.Server({
     host: 'localhost',
@@ -15,8 +17,8 @@ export const initializeServer = async () => {
   await user.init(server)
   await server.register(plugins)
   await sequelize.sync({
-    force: process.env.NODE_ENV === 'test' ? true : false,
-    logging: process.env.NODE_ENV === 'development',
+    force: NODE_ENV === 'test' ? true : false,
+    logging: NODE_ENV === 'dev',
   })
   server.auth.strategy('jwt', 'jwt', {
     key: process.env.JWT_KEY || 'NeverShareYourSecret',
