@@ -4,7 +4,7 @@
     "noEmit": true,
     "strict": true,
     "target": "esnext",
-    "module": "esnext",
+    // "module": "esnext",
     "jsx": "preserve",
     "allowJs": true,
     "moduleResolution": "node",
@@ -19,6 +19,9 @@
     "baseUrl": ".",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "types": [
+      "jest"
+    ],
     "typeRoots": [
       "./node_modules/@types"
     ],
@@ -29,5 +32,8 @@
     ],
     "outDir": ".next"
   },
-  "exclude": [".next", "server/**/*.*"]
+  "exclude": [
+    ".next",
+    "server/**/*.*"
+  ]
 }

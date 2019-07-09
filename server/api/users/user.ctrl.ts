@@ -1,18 +1,16 @@
+import * as Boom from 'boom'
 import * as Hapi from 'hapi'
 import * as Joi from 'joi'
-import * as Boom from 'boom'
-
-import { UserPayload } from './user'
-
 import { nested } from '..'
 import { User } from '../../models/User'
+import { UserPayload } from './user'
 
 export default function(server: Hapi.Server) {
   server.route({
     method: 'GET',
     path: nested('/users'),
     options: {
-      // auth: false,
+      auth: false,
       description: 'Get users',
       tags: ['api', 'user'],
       validate: {},
@@ -77,10 +75,12 @@ export default function(server: Hapi.Server) {
           password: Joi.string().required(),
         },
       },
-      handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+      handler: async (req: Hapi.Request, h: Hapi.ResponseToolkit) => {
         try {
-          const user: User = await User.createByEmail(req.payload as UserPayload)
-          return { token: user.getToken() }
+          const user: User = await User.createByEmail(
+            req.payload as UserPayload
+          )
+          return h.response({ token: user.getToken() }).code(201)
         } catch (e) {
           return Boom.badRequest()
         }
