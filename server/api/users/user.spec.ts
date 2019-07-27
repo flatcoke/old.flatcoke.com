@@ -1,5 +1,6 @@
 import { Server, ServerInjectOptions } from 'hapi'
 import { initializeServer } from '../../hapi'
+import {sequelize} from '../../sequelize'
 import { User } from '../../models/User'
 
 describe('User', () => {
@@ -7,6 +8,11 @@ describe('User', () => {
 
   beforeAll(async done => {
     server = await initializeServer()
+    done()
+  })
+
+  afterAll(async done => {
+    await sequelize.close()
     done()
   })
 
