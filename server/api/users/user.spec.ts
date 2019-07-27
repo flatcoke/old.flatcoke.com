@@ -1,7 +1,7 @@
 import { Server, ServerInjectOptions } from 'hapi'
 import { initializeServer } from '../../hapi'
-import {sequelize} from '../../sequelize'
 import { User } from '../../models/User'
+import { sequelize } from '../../sequelize'
 
 describe('User', () => {
   let server: Server
