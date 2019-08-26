@@ -7,5 +7,5 @@ export const sequelize = new Sequelize({
   database: process.env.DATABASE || 'flatcoke',
   username: process.env.USERNAME || 'cola',
   password: process.env.PASSWORD || 'qwer1234',
-  models: [__dirname + '/models'],
+  models: [__dirname + '/../models'],
 })

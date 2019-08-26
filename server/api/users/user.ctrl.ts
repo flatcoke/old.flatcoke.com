@@ -78,7 +78,7 @@ export default function(server: Hapi.Server) {
       handler: async (req: Hapi.Request, h: Hapi.ResponseToolkit) => {
         try {
           const user: User = await User.createByEmail(
-            req.payload as UserPayload
+            req.payload as UserPayload,
           )
           return h.response({ token: user.getToken() }).code(201)
         } catch (e) {
@@ -96,9 +96,8 @@ export default function(server: Hapi.Server) {
       tags: ['api', 'user'],
       validate: {
         params: {
-          id: Joi.number()
-            .integer()
-            .required(),
+          // prettier-ignore
+          id: Joi.number().integer().required()
         },
         payload: {
           email: Joi.string().email(),
