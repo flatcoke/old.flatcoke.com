@@ -1,5 +1,5 @@
 import * as next from 'next'
-import { initializeServer, port } from './hapi'
+import { initializeServer, port } from './app'
 import {
   defaultHandlerWrapper,
   nextHandlerWrapper,
