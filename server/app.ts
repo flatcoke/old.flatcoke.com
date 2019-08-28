@@ -1,6 +1,7 @@
 require('dotenv').config()
 import * as Hapi from 'hapi'
 import * as user from './api/users'
+import * as auth from './api/auth'
 import { validate } from './auth'
 import { plugins } from './config/plugins'
 import { sequelize } from './database'
@@ -15,6 +16,7 @@ export const initializeServer = async () => {
     port,
   })
   await user.init(server)
+  await auth.init(server)
   await server.register(plugins)
   await sequelize.sync({
     force: NODE_ENV === 'test',

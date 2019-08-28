@@ -1,13 +1,11 @@
 import { ServerRegisterPluginObject } from 'hapi'
-import * as inert from 'inert'
-import * as vision from 'vision'
 
 export const plugins: ServerRegisterPluginObject<any>[] = [
   {
-    plugin: vision,
+    plugin: require('vision'),
   },
   {
-    plugin: inert,
+    plugin: require('inert'),
   },
   {
     plugin: require('hapi-swagger'),
@@ -28,5 +26,8 @@ export const plugins: ServerRegisterPluginObject<any>[] = [
   },
   {
     plugin: require('hapi-auth-jwt2'),
+  },
+  {
+    plugin: require('bell'),
   },
 ]
