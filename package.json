@@ -9,6 +9,7 @@
   "dependencies": {
     "@hapi/joi": "^15.0.1",
     "bcrypt": "^3.0.6",
+    "bell": "^10.0.0",
     "boom": "^7.3.0",
     "dotenv": "^8.0.0",
     "dotenv-webpack": "^1.7.0",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
+    "@types/bell": "^9.3.2",
     "@types/boom": "^7.2.1",
     "@types/dotenv": "^6.1.1",
     "@types/hapi": "^18.0.2",
