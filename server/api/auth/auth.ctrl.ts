@@ -33,7 +33,7 @@ export default function(server: Hapi.Server) {
           ] = await User.findOrCreateByFacebookId(
             result.data as FacebookUserData,
           )
-          return _h.response(user).code(isCreated ? 201 : 200)
+          return _h.response({ user }).code(isCreated ? 201 : 200)
         } catch (_e) {
           // TODO: to be BOOM error
           return 'error'
