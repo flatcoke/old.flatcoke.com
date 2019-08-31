@@ -1,4 +1,4 @@
-import { hashSync } from 'bcrypt'
+import { genSaltSync, hashSync } from 'bcrypt'
 import { sign } from 'jsonwebtoken'
 import {
   BeforeCreate,
@@ -10,6 +10,7 @@ import {
   NotEmpty,
   Table,
 } from 'sequelize-typescript'
+import { FacebookUserData } from '../api/auth/index.d'
 import { UserPayload } from '../api/users/user'
 import { JWT_KEY } from '../config/env'
 
@@ -30,10 +31,9 @@ export class User extends Model<User> {
   id!: number
 
   @IsEmail
-  @NotEmpty
   @Column({
     type: DataType.STRING,
-    allowNull: false,
+    allowNull: true,
     unique: {
       name: 'email',
       msg: 'The email already used.',
@@ -41,10 +41,9 @@ export class User extends Model<User> {
   })
   email!: string
 
-  @NotEmpty
   @Column({
     type: DataType.STRING(30),
-    allowNull: false,
+    allowNull: true,
     unique: {
       name: 'username',
       msg: 'The username already used.',
@@ -87,15 +86,20 @@ export class User extends Model<User> {
   })
   updatedAt!: Date
 
+  // @BeforeCreate
+  // static setBycriptPassword(instance: User): void {
+  //   instance.password = hashSync(instance.password, 10)
+  // }
+
   @BeforeCreate
-  static setBycriptPassword(instance: User): void {
-    instance.password = hashSync(instance.password, 10)
+  static setLowerCase(_user: User): void {
+    // user.username = user.username.toLowerCase()
+    // user.email = user.email.toLowerCase()
   }
 
   @BeforeCreate
-  static setLowerCase(instance: User): void {
-    instance.username = instance.username.toLowerCase()
-    instance.email = instance.email.toLowerCase()
+  static setHashPassword(user: User): void {
+    user.password = hashSync(user.password, genSaltSync(10))
   }
 
   getToken(): string {
@@ -105,7 +109,7 @@ export class User extends Model<User> {
         email: this.email,
         username: this.username,
       },
-      JWT_KEY
+      JWT_KEY,
     )
   }
 
@@ -114,6 +118,15 @@ export class User extends Model<User> {
       ...userPayload,
       provider: 'email',
       uid: userPayload.email,
+    })
+  }
+
+  public static findOrCreateByFacebookId(
+    facebookUserData: FacebookUserData,
+  ): User {
+    return User.findOrCreate({
+      where: { provider: 'facebook', uid: facebookUserData.id },
+      defaults: { password: 'default' },
     })
   }
 }
