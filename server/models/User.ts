@@ -113,7 +113,7 @@ export class User extends Model<User> {
     )
   }
 
-  public static createByEmail(userPayload: UserPayload): User {
+  public static createByEmail(userPayload: UserPayload): Promise<User> {
     return User.create({
       ...userPayload,
       provider: 'email',
@@ -123,7 +123,7 @@ export class User extends Model<User> {
 
   public static findOrCreateByFacebookId(
     facebookUserData: FacebookUserData,
-  ): User {
+  ): Promise<[User, boolean]> {
     return User.findOrCreate({
       where: { provider: 'facebook', uid: facebookUserData.id },
       defaults: { password: 'default' },

@@ -27,10 +27,13 @@ export default function(server: Hapi.Server) {
           const result = await axios.get(FACEBOOK_GRAPH_URI, {
             params: { access_token: accessToken.accessToken },
           })
-          const user: User = await User.findOrCreateByFacebookId(
+          const [user, isCreated]: [
+            User,
+            boolean
+          ] = await User.findOrCreateByFacebookId(
             result.data as FacebookUserData,
           )
-          return user
+          return _h.response(user).code(isCreated ? 201 : 200)
         } catch (_e) {
           // TODO: to be BOOM error
           return 'error'
