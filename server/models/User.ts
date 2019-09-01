@@ -1,5 +1,5 @@
 import { genSaltSync, hashSync } from 'bcrypt'
-import { sign } from 'jsonwebtoken'
+import { sign, verify } from 'jsonwebtoken'
 import {
   BeforeCreate,
   Column,
@@ -10,7 +10,11 @@ import {
   NotEmpty,
   Table,
 } from 'sequelize-typescript'
-import { FacebookAccessTokenData, JWTToken } from '../api/auth/index.d'
+import {
+  FacebookAccessTokenData,
+  JWTToken,
+  IAuthCredentials,
+} from '../api/auth/index.d'
 import { UserPayload } from '../api/users/user'
 import { JWT_KEY } from '../config/env'
 
@@ -103,20 +107,34 @@ export class User extends Model<User> {
   }
 
   getJWTToken(): JWTToken {
+    return User.generateJWTToken(this)
+  }
+
+  private static generateJWTToken({
+    id,
+    username,
+    email,
+    createdAt,
+  }: {
+    id: number
+    username: string | null
+    email: string | null
+    createdAt: Date
+  }): JWTToken {
     const Token: JWTToken = {
       accessToken: sign(
         {
-          id: this.id,
-          email: this.email,
-          username: this.username,
-          createdAt: this.createdAt,
+          id: id,
+          email: email,
+          username: username,
+          createdAt: createdAt,
         },
         JWT_KEY,
         { expiresIn: '20m' },
       ),
       refreshToken: sign(
         {
-          id: this.id,
+          id: id,
         },
         JWT_KEY,
         { expiresIn: '30days' },
@@ -131,6 +149,13 @@ export class User extends Model<User> {
       provider: 'email',
       uid: userPayload.email,
     })
+  }
+
+  public static generateJWTTokenByRefreshToken(refreshToken: string): JWTToken {
+    return User.generateJWTToken(verify(
+      refreshToken,
+      JWT_KEY,
+    ) as IAuthCredentials)
   }
 
   public static findOrCreateByFacebookId(
