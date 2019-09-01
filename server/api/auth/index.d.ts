@@ -7,3 +7,8 @@ export interface FacebookAccessTokenData {
   name: string
   email?: string
 }
+
+export interface JWTToken {
+  accessToken: string
+  refreshToken: string
+}

@@ -10,7 +10,7 @@ import {
   NotEmpty,
   Table,
 } from 'sequelize-typescript'
-import { FacebookAccessTokenData } from '../api/auth/index.d'
+import { FacebookAccessTokenData, JWTToken } from '../api/auth/index.d'
 import { UserPayload } from '../api/users/user'
 import { JWT_KEY } from '../config/env'
 
@@ -102,15 +102,27 @@ export class User extends Model<User> {
     user.password = hashSync(user.password, genSaltSync(10))
   }
 
-  getToken(): string {
-    return sign(
-      {
-        id: this.id,
-        email: this.email,
-        username: this.username,
-      },
-      JWT_KEY,
-    )
+  getJWTToken(): JWTToken {
+    const Token: JWTToken = {
+      accessToken: sign(
+        {
+          id: this.id,
+          email: this.email,
+          username: this.username,
+          createdAt: this.createdAt,
+        },
+        JWT_KEY,
+        { expiresIn: '20m' },
+      ),
+      refreshToken: sign(
+        {
+          id: this.id,
+        },
+        JWT_KEY,
+        { expiresIn: '30days' },
+      ),
+    }
+    return Token
   }
 
   public static createByEmail(userPayload: UserPayload): Promise<User> {

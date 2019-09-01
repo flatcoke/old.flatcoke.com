@@ -80,7 +80,7 @@ export default function(server: Hapi.Server) {
           const user: User = await User.createByEmail(
             req.payload as UserPayload,
           )
-          return h.response({ token: user.getToken() }).code(201)
+          return h.response({ ...user.getJWTToken() }).code(201)
         } catch (e) {
           return Boom.badRequest()
         }
