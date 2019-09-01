@@ -21,9 +21,9 @@ export default function(server: Hapi.Server) {
           accessToken: Joi.string().required().token()
         },
       },
-      handler: async (_req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+      handler: async (req: Hapi.Request, h: Hapi.ResponseToolkit) => {
         try {
-          const accessToken = _req.payload as IAccessToken
+          const accessToken = req.payload as IAccessToken
           const result = await axios.get(FACEBOOK_GRAPH_URI, {
             params: { access_token: accessToken.accessToken },
           })
@@ -33,12 +33,11 @@ export default function(server: Hapi.Server) {
           ] = await User.findOrCreateByFacebookId(
             result.data as FacebookAccessTokenData,
           )
-          return _h
-            .response({ ...user.getJWTToken() })
-            .code(isCreated ? 201 : 200)
+          // prettier-ignore
+          return h.response({ ...user.getJWTToken() }).code(isCreated ? 201 : 200)
         } catch (_e) {
           // TODO: to be BOOM error
-          return 'error'
+          return Boom.badRequest()
         }
       },
     },

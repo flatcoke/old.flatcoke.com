@@ -10,7 +10,6 @@ export default function(server: Hapi.Server) {
     method: 'GET',
     path: nested('/users'),
     options: {
-      auth: false,
       description: 'Get users',
       tags: ['api', 'user'],
       validate: {},
