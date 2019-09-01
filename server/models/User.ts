@@ -10,7 +10,7 @@ import {
   NotEmpty,
   Table,
 } from 'sequelize-typescript'
-import { FacebookUserData } from '../api/auth/index.d'
+import { FacebookAccessTokenData } from '../api/auth/index.d'
 import { UserPayload } from '../api/users/user'
 import { JWT_KEY } from '../config/env'
 
@@ -122,11 +122,15 @@ export class User extends Model<User> {
   }
 
   public static findOrCreateByFacebookId(
-    facebookUserData: FacebookUserData,
+    facebookUser: FacebookAccessTokenData,
   ): Promise<[User, boolean]> {
     return User.findOrCreate({
-      where: { provider: 'facebook', uid: facebookUserData.id },
-      defaults: { password: 'default' },
+      where: { provider: 'facebook', uid: facebookUser.id },
+      defaults: {
+        password: 'default',
+        username: facebookUser.name.replace(/\s/g, ''),
+        email: facebookUser.email,
+      },
     })
   }
 }

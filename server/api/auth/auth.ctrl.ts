@@ -3,7 +3,7 @@ import * as Hapi from 'hapi'
 import * as Joi from 'joi'
 import { nested } from '.'
 import { User } from '../../models/User'
-import { FacebookUserData, IAccessToken } from './index.d'
+import { FacebookAccessTokenData, IAccessToken } from './index.d'
 
 const FACEBOOK_GRAPH_URI = 'https://graph.facebook.com/me'
 
@@ -31,7 +31,7 @@ export default function(server: Hapi.Server) {
             User,
             boolean
           ] = await User.findOrCreateByFacebookId(
-            result.data as FacebookUserData,
+            result.data as FacebookAccessTokenData,
           )
           return _h.response({ user }).code(isCreated ? 201 : 200)
         } catch (_e) {
