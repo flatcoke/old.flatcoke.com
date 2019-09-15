@@ -15,7 +15,7 @@ import {
   JWTToken,
   IAuthCredentials,
 } from '../api/auth/index.d'
-import { UserPayload } from '../api/users/user'
+import { UserPayload } from '../api/users/index.d'
 import { JWT_KEY } from '../config/env'
 
 @DefaultScope({

@@ -3,7 +3,7 @@ import * as Hapi from 'hapi'
 import * as Joi from 'joi'
 import { nested } from '..'
 import { User } from '../../models/User'
-import { UserPayload } from './user'
+import { UserPayload } from './index.d'
 
 export default function(server: Hapi.Server) {
   server.route({

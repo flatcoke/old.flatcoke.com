@@ -1,7 +1,7 @@
 require('dotenv').config()
 import * as Hapi from 'hapi'
-import * as user from './api/users'
 import * as auth from './api/auth'
+import * as user from './api/users'
 import { validate } from './auth'
 import { plugins } from './config/plugins'
 import { sequelize } from './database'
